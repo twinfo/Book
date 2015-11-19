@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
@@ -29,7 +31,7 @@ import javax.swing.JRadioButtonMenuItem;
  * @Date 2015年11月16日 上午10:02:44
  */
 public class MyGraghics extends JFrame 
-    implements ActionListener,ItemListener{
+    implements ActionListener,ItemListener,KeyListener{
 	private static final long serialVersionUID = 1L;
 	JMenuBar jmb;  // 菜单条
 	JMenu fileMenu,optMenu,colorMenu;  // 菜单
@@ -39,11 +41,15 @@ public class MyGraghics extends JFrame
 	ButtonGroup bg; // 打包单选钮
 	Color c = new Color(0,0,255);  // 设置蓝色默认值
 	MyPanel myPanel; // 使用内部类定义一个对象
+	int x = 100, y = 100; // 图形初始位置
 	
 	public MyGraghics() {
 		createMenu();  // 初始化菜单,模块化
 		myPanel = new MyPanel();
 		getContentPane().add(myPanel, BorderLayout.CENTER); // 内部类加入主容器中
+
+		// 注册监听器
+		this.addKeyListener(this);
 	}
 	
 	private void createMenu() {
@@ -98,7 +104,8 @@ public class MyGraghics extends JFrame
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		// 修改底色
+		setImage(g);   // 画王八
+		/*// 修改底色
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 55, getWidth(), getHeight()-55);
 		
@@ -111,9 +118,67 @@ public class MyGraghics extends JFrame
 		g.fillRect(150, 120, 100, 120);
 		
 		g.setColor(Color.RED);
-		g.fillOval(160, 140, 100, 70);
+		g.fillOval(160, 140, 100, 70);*/
 	}
 
+	// 画的一只王八
+	private void setImage(Graphics g) {
+		// 清屏
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 50, this.getSize().width, this.getSize().height-50);
+
+		// 为画笔调色
+		Color color = new Color(80, 233, 22);
+		g.setColor(color);
+		// 决定所画的内容
+		// 贴图顺序：先画一个图像，再画一个图像
+		// 头部
+		g.fillOval(x, y, 50, 70);
+
+		g.setColor(Color.white);
+
+		g.fillOval(x + 5, y + 10, 10, 10);
+		g.fillOval(x + 35, y + 10, 10, 10);
+
+		g.setColor(Color.black);
+		g.fillOval(x + 3, y + 8, 10, 10);
+		g.fillOval(x + 33, y + 8, 10, 10);
+
+		// 尾巴
+		color = new Color(80, 233, 22);
+		g.setColor(color);
+		g.fillOval(x + 15, y + 160, 70, 90);
+		g.setColor(Color.WHITE);
+		g.fillOval(x + 25, y + 160, 70, 90);
+
+		color = new Color(80, 233, 22);
+		g.setColor(color);
+		g.fillOval(x + 20, y + 200, 30, 30);
+		g.setColor(Color.white);
+		g.fillOval(x + 28, y + 208, 14, 14);
+
+		// 四只脚
+		color = new Color(80, 233, 22);
+		g.setColor(color);
+		g.fillOval(x - 70, y + 45, 50, 60);
+		g.fillOval(x + 70, y + 45, 50, 60);
+		g.fillOval(x + 70, y + 140, 50, 60);
+		g.fillOval(x - 70, y + 140, 50, 60);
+
+		// 中心外园
+		color = new Color(65, 188, 18);
+		g.setColor(color);
+		g.fillOval(x - 50, y + 40, 150, 150);
+		// 中心内园
+		g.setColor(Color.green);
+		g.fillOval(x - 40, y + 50, 130, 130);
+		// 背上的线
+		color = new Color(65, 188, 18);
+		g.setColor(color);
+
+		// g.drawLine(155, 245, 175, 265);
+	}
+	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// 复选或单选菜单项
@@ -143,6 +208,8 @@ public class MyGraghics extends JFrame
 			repaint();  // 自动调用paint方法进行重新绘制
 		}
 	}
+	
+	
 
 	// 内部类
 	class MyPanel extends JPanel implements MouseMotionListener{
@@ -170,5 +237,33 @@ public class MyGraghics extends JFrame
 		}
 		
 	}
+
+	@Override
+	public void keyPressed(KeyEvent e) { // 键盘按下
+		int key = e.getKeyCode();  // 获得键盘码
+		if (key == KeyEvent.VK_UP){ // 向上
+			y--;
+		} else if (key == KeyEvent.VK_DOWN){ // 向下
+			y++;
+		} else if (key == KeyEvent.VK_LEFT){ // 向左
+			x--;
+		} else if (key == KeyEvent.VK_RIGHT){ //向右
+			x++;
+		}
+		repaint(); 
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) { // 键盘抬起
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {  // 键盘敲击（按下+抬起）
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

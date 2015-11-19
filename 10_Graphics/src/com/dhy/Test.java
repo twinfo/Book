@@ -13,7 +13,7 @@ public class Test {
 public static void main(String[] args) {
 	MyGraghics graghics = new MyGraghics();
 	graghics.setSize(600, 450);
-	graghics.setResizable(false);
+	graghics.setResizable(false);  //不允许改变尺寸
 	graghics.setVisible(true);
 }
 }
